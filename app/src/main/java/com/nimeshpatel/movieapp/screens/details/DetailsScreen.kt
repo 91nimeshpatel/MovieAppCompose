@@ -13,6 +13,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
+import com.nimeshpatel.movieapp.model.Movie
+import com.nimeshpatel.movieapp.model.findMovieById
 import com.nimeshpatel.movieapp.widget.MyTopAppBar
 
 /**
@@ -21,20 +23,27 @@ import com.nimeshpatel.movieapp.widget.MyTopAppBar
  */
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun DetailsScreen(navController: NavController, movieName: String?){
+fun DetailsScreen(navController: NavController, movieId: String?){
     Scaffold(
         topBar = {
             MyTopAppBar(navController=navController, title = "Detail Screen" , isBackButtonEnable = true)
         }
     ) {
-        DetailContent(navController,movieName = movieName)
+        movieId?.let {id->
+            findMovieById(id)?.let {movie->
+                DetailContent(navController,movie =movie )
+            }
+
+        }
+
+
     }
     
 
 }
 
 @Composable
-fun DetailContent(navController: NavController, movieName: String?){
+fun DetailContent(navController: NavController, movie: Movie){
     Surface(modifier = Modifier
         .fillMaxWidth()
         .fillMaxHeight()) {
@@ -42,7 +51,7 @@ fun DetailContent(navController: NavController, movieName: String?){
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-            Text(text = "$movieName", style = MaterialTheme.typography.headlineLarge)
+            Text(text = "${movie.title}", style = MaterialTheme.typography.headlineLarge)
         }
 
     }
