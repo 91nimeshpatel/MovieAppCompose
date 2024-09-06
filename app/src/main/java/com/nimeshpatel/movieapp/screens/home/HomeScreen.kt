@@ -21,6 +21,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -49,6 +50,7 @@ import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.nimeshpatel.movieapp.R
+import com.nimeshpatel.movieapp.Widgets.MovieRow
 import com.nimeshpatel.movieapp.model.Movie
 import com.nimeshpatel.movieapp.model.getMovies
 import com.nimeshpatel.movieapp.navigation.MovieScreens
@@ -90,99 +92,6 @@ fun MainContent(
                         navController.navigate(route = MovieScreens.DetailScreen.name + "/$movie")
                     }
                 }
-            }
-        }
-
-    }
-}
-
-@Preview
-@Composable
-private fun MovieRow(movie: Movie = getMovies().first(), onItemClick: (String) -> Unit = {}) {
-    var isExpanded by remember {
-        mutableStateOf(false)
-    }
-    Card(
-        modifier = Modifier
-            .padding(10.dp)
-            .fillMaxWidth()
-            .clickable {
-                onItemClick(movie.id)
-            },
-        shape = RoundedCornerShape(corner = CornerSize(16.dp)),
-        elevation = CardDefaults.cardElevation(6.dp),
-
-        ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Start
-        ) {
-            Surface(
-                modifier = Modifier
-                    .padding(12.dp)
-                    .size(100.dp),
-                shape = CircleShape,
-                shadowElevation = 4.dp
-            ) {
-
-                AsyncImage(
-                    model = ImageRequest.Builder(LocalContext.current)
-                        .data(movie.images.first())
-                        .crossfade(true)
-                        .build(),
-                    placeholder = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = movie.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.clip(CircleShape)
-                )
-
-            }
-            Column(modifier = Modifier.padding(4.dp)) {
-                Text(
-                    text = movie.title,
-                    color = Color.Black,
-                    style = MaterialTheme.typography.headlineMedium
-                )
-                Text(
-                    text = "Director: ${movie.director}",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-                Text(
-                    text = "Release: ${movie.year}",
-                    color = Color.Black,
-                    style = MaterialTheme.typography.bodyMedium
-                )
-
-                AnimatedVisibility(visible = isExpanded) {
-                    Column{
-                        Text(
-                            buildAnnotatedString {
-                                withStyle(style = SpanStyle(color = Color.DarkGray,
-                                    fontSize = 13.sp)){
-                                    append("Plot: ")
-                                }
-                                withStyle(style = SpanStyle(color = Color.DarkGray,
-                                    fontSize = 13.sp,
-                                    fontWeight = FontWeight.Bold
-                                )){
-                                    append(movie.plot)
-                                }
-                            }
-                        )
-                    }
-                }
-                Icon(
-                    imageVector = if (isExpanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown,
-                    contentDescription = "Down Arrow",
-                    modifier = Modifier
-                        .size(24.dp)
-                        .align(Alignment.CenterHorizontally)
-                        .clickable {
-                            isExpanded = !isExpanded
-                        },
-                    tint = Color.DarkGray
-                )
             }
         }
 
